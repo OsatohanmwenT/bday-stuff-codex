@@ -120,6 +120,19 @@ main {
   min-height: calc(100vh - 72px);
 }
 
+.route-page::before {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 2;
+  height: 10px;
+  background: repeating-linear-gradient(90deg, var(--hot) 0 42px, var(--yellow) 42px 84px, var(--blue) 84px 126px, var(--green) 126px 168px);
+  content: "";
+  pointer-events: none;
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: pageRibbon 0.68s var(--snap) forwards;
+}
+
 .party-thread {
   position: absolute;
   top: 16vh;
@@ -289,6 +302,7 @@ main {
 .story-progress button.active {
   background: var(--yellow);
   transform: rotate(8deg) scale(1.25);
+  animation: progressWiggle 1.8s ease-in-out infinite;
 }
 
 .story-progress svg {
@@ -301,6 +315,7 @@ main {
 }
 
 .story-action {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -316,13 +331,38 @@ main {
   font-size: 15px;
   font-weight: 900;
   text-transform: uppercase;
+  overflow: hidden;
   transition: transform 0.28s var(--snap), box-shadow 0.28s var(--snap), background 0.28s ease;
+}
+
+.story-action::before {
+  position: absolute;
+  inset: -40% auto -40% -60%;
+  width: 48%;
+  background: linear-gradient(90deg, transparent, rgba(255, 253, 243, 0.75), transparent);
+  content: "";
+  transform: skewX(-18deg);
+  transition: left 0.58s var(--snap);
+}
+
+.story-action span,
+.story-action svg {
+  position: relative;
+  z-index: 1;
 }
 
 .story-action:hover {
   background: var(--yellow);
   box-shadow: 5px 5px 0 var(--ink);
   transform: translate(3px, 3px) rotate(-1deg);
+}
+
+.story-action:hover::before {
+  left: 115%;
+}
+
+.story-action:hover svg {
+  animation: iconPop 0.52s var(--snap);
 }
 
 .story-action:active {
@@ -394,9 +434,25 @@ main {
   transition: transform 0.45s var(--snap), box-shadow 0.45s var(--snap), filter 0.3s ease;
 }
 
+.envelope-card::after {
+  position: absolute;
+  inset: -20%;
+  z-index: 2;
+  background: linear-gradient(120deg, transparent 35%, rgba(255, 253, 243, 0.45) 48%, transparent 60%);
+  content: "";
+  pointer-events: none;
+  transform: translateX(-90%) rotate(8deg);
+  transition: transform 0.72s var(--snap);
+}
+
 .envelope-card:hover {
   box-shadow: 9px 9px 0 var(--ink);
   transform: translate(5px, 5px) rotate(0deg);
+}
+
+.envelope-card:hover::after,
+.envelope-card.opening::after {
+  transform: translateX(90%) rotate(8deg);
 }
 
 .envelope-card.opening {
@@ -560,6 +616,10 @@ main {
   background: var(--yellow);
   box-shadow: 4px 4px 0 var(--ink);
   transform: translateX(calc(-50% + 3px)) translateY(3px);
+}
+
+.seal:hover svg {
+  animation: iconPop 0.52s var(--snap);
 }
 
 .seal span {
@@ -926,6 +986,19 @@ main {
   transition: transform 0.32s var(--snap), box-shadow 0.32s var(--snap), filter 0.32s ease;
 }
 
+.carousel-polaroid::after {
+  position: absolute;
+  inset: 16px 16px 74px;
+  z-index: 1;
+  border: 4px solid transparent;
+  background: linear-gradient(135deg, rgba(255, 253, 243, 0.28), transparent 36%, rgba(67, 198, 255, 0.22));
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.98);
+  transition: opacity 0.28s ease, transform 0.28s var(--snap);
+}
+
 .carousel-polaroid:nth-child(even) {
   transform: rotate(2deg) scale(0.94);
 }
@@ -936,10 +1009,17 @@ main {
   transform: translate(3px, 3px) rotate(0deg) scale(0.98);
 }
 
+.carousel-polaroid:hover::after,
+.carousel-polaroid.is-active::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
 .carousel-polaroid.is-active {
   z-index: 2;
   box-shadow: var(--shadow-lg);
   transform: rotate(0deg) scale(1);
+  animation: activePolaroid 2.4s ease-in-out infinite;
 }
 
 .carousel-polaroid:active {
@@ -1224,6 +1304,10 @@ main {
   transform: translate(3px, 3px) rotate(0deg);
 }
 
+.video-note-trigger:hover svg {
+  animation: playPulse 0.72s var(--snap);
+}
+
 .video-note-trigger span {
   font-family: "Epilogue", sans-serif;
   font-size: 28px;
@@ -1426,6 +1510,7 @@ main {
 }
 
 .surprise-card-button {
+  position: relative;
   display: grid;
   width: 100%;
   min-height: inherit;
@@ -1433,6 +1518,7 @@ main {
   gap: 10px;
   padding: 32px 24px;
   text-align: center;
+  overflow: hidden;
 }
 
 .surprise-card-button svg {
@@ -1442,6 +1528,56 @@ main {
 .surprise-card:hover {
   box-shadow: 5px 5px 0 var(--ink);
   transform: translate(3px, 3px) rotate(0deg) !important;
+}
+
+.surprise-card:hover svg,
+.surprise-card.is-open svg {
+  animation: iconPop 0.58s var(--snap);
+}
+
+.surprise-pop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.surprise-pop span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 18px;
+  border: 3px solid var(--ink);
+  background: var(--yellow);
+  opacity: 0;
+}
+
+.surprise-pop span:nth-child(2n) {
+  background: var(--green);
+}
+
+.surprise-pop span:nth-child(3n) {
+  background: var(--blue);
+}
+
+.surprise-pop span:nth-child(1) { --x: -92px; --y: -78px; --r: 30deg; }
+.surprise-pop span:nth-child(2) { --x: 88px; --y: -72px; --r: 95deg; }
+.surprise-pop span:nth-child(3) { --x: -112px; --y: 14px; --r: 150deg; }
+.surprise-pop span:nth-child(4) { --x: 112px; --y: 18px; --r: 230deg; }
+.surprise-pop span:nth-child(5) { --x: -52px; --y: 82px; --r: 310deg; }
+.surprise-pop span:nth-child(6) { --x: 48px; --y: 86px; --r: 70deg; }
+
+.surprise-card.is-open .surprise-pop span {
+  animation: miniBurst 0.58s var(--snap) forwards;
+}
+
+.surprise-card-button > svg,
+.surprise-card-button > img,
+.surprise-card-button > h2,
+.surprise-card-button > p {
+  position: relative;
+  z-index: 1;
 }
 
 .surprise-card h2 {
@@ -1537,6 +1673,39 @@ main {
 @keyframes popIn {
   from { opacity: 0; transform: translateY(16px) scale(0.96) rotate(-2deg); }
   to { opacity: 1; transform: translateY(0) scale(1) rotate(-1deg); }
+}
+
+@keyframes pageRibbon {
+  0% { transform: scaleX(0); }
+  70% { transform: scaleX(1); }
+  100% { transform: scaleX(0); transform-origin: right center; }
+}
+
+@keyframes progressWiggle {
+  0%, 100% { transform: rotate(8deg) scale(1.25); }
+  50% { transform: rotate(-4deg) scale(1.36); }
+}
+
+@keyframes iconPop {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  42% { transform: scale(1.2) rotate(-8deg); }
+  70% { transform: scale(0.94) rotate(6deg); }
+}
+
+@keyframes activePolaroid {
+  0%, 100% { filter: saturate(1.1) contrast(1.02); }
+  50% { filter: saturate(1.24) contrast(1.07); }
+}
+
+@keyframes playPulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+  50% { transform: scale(1.24); filter: drop-shadow(0 0 12px rgba(255, 61, 127, 0.65)); }
+}
+
+@keyframes miniBurst {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.35) rotate(0deg); }
+  22% { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1) rotate(var(--r)); }
 }
 
 @media (max-width: 900px) {
@@ -1778,6 +1947,15 @@ main {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .animate-in,
+  .story-drift,
+  .route-page::before,
+  .story-progress button.active,
+  .carousel-polaroid.is-active,
+  .surprise-card.is-open .surprise-pop span {
+    animation: none !important;
   }
 
   .animate-in,

@@ -470,6 +470,11 @@ function ExpandableSurprise({ surprise, index, openSurprise, setOpenSurprise }) 
       transitionDuration={0.34}
     >
       <ExpandableTrigger className="surprise-card-button">
+        <span className="surprise-pop" aria-hidden="true">
+          {Array.from({ length: 6 }).map((_, burstIndex) => (
+            <span key={burstIndex} />
+          ))}
+        </span>
         {surprise.icon === "gift" && <Gift size={44} />}
         {surprise.icon === "heart" && <Sparkles size={44} />}
         {surprise.icon === "star" && <Star size={44} />}
