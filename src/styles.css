@@ -265,20 +265,28 @@ main {
   background: var(--white);
   box-shadow: 6px 6px 0 var(--ink);
   transform: translateY(-50%);
-  pointer-events: none;
+  pointer-events: auto;
 }
 
-.story-progress span {
+.story-progress button {
   position: relative;
   display: grid;
   width: 14px;
   height: 14px;
+  padding: 0;
   place-items: center;
   border: 3px solid var(--ink);
   background: var(--white);
+  transition: transform 0.2s var(--snap), background 0.2s ease, box-shadow 0.2s var(--snap);
 }
 
-.story-progress span.active {
+.story-progress button:hover {
+  background: var(--green);
+  box-shadow: 3px 3px 0 var(--ink);
+  transform: scale(1.18) rotate(-6deg);
+}
+
+.story-progress button.active {
   background: var(--yellow);
   transform: rotate(8deg) scale(1.25);
 }
@@ -1001,12 +1009,54 @@ main {
   box-shadow: 1px 1px 0 var(--ink);
 }
 
+.carousel-button-left:hover {
+  transform: translateY(-50%) translate(-3px, 3px);
+}
+
+.carousel-button-right:hover {
+  transform: translateY(-50%) translate(3px, 3px);
+}
+
 .carousel-button-left {
   left: 14px;
 }
 
 .carousel-button-right {
   right: 14px;
+}
+
+.carousel-dots {
+  position: absolute;
+  right: 58px;
+  bottom: 16px;
+  left: 58px;
+  z-index: 4;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.carousel-dots button {
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border: 3px solid var(--ink);
+  border-radius: 0;
+  background: var(--white);
+  box-shadow: 3px 3px 0 var(--ink);
+  transition: transform 0.2s var(--snap), background 0.2s ease, box-shadow 0.2s var(--snap);
+}
+
+.carousel-dots button:hover {
+  background: var(--green);
+  box-shadow: 1px 1px 0 var(--ink);
+  transform: translate(2px, 2px) rotate(-8deg);
+}
+
+.carousel-dots button.active {
+  background: var(--yellow);
+  transform: rotate(8deg) scale(1.18);
 }
 
 .memory-lightbox {
@@ -1018,6 +1068,7 @@ main {
   padding: 28px;
   background: rgba(17, 17, 17, 0.62);
   animation: fadeIn 0.24s ease both;
+  cursor: zoom-out;
 }
 
 .memory-lightbox-card {
@@ -1028,6 +1079,7 @@ main {
   padding: 18px 18px 68px;
   background: var(--white);
   animation: popIn 0.32s var(--snap) both;
+  cursor: default;
 }
 
 .memory-lightbox-card::before {
@@ -1264,6 +1316,7 @@ main {
   place-items: center;
   padding: 22px;
   background: rgba(17, 17, 17, 0.62);
+  cursor: zoom-out;
 }
 
 .rb-screen-content {
@@ -1272,6 +1325,7 @@ main {
   max-height: 90vh;
   overflow: auto;
   background: var(--white);
+  cursor: default;
 }
 
 .rb-screen-close {

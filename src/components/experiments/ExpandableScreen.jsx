@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const ExpandableScreenContext = createContext(null);
 
@@ -38,6 +38,17 @@ export function ExpandableScreen({
     };
   }, [isExpanded, lockScroll]);
 
+  useEffect(() => {
+    if (!isExpanded) return undefined;
+
+    function onKeyDown(event) {
+      if (event.key === "Escape") collapse();
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isExpanded]);
+
   return (
     <ExpandableScreenContext.Provider value={{ isExpanded, expand, collapse, layoutId, triggerRadius, contentRadius, animationDuration }}>
       {children}
@@ -68,13 +79,14 @@ export function ExpandableScreenContent({ children, className = "", closeButtonC
   return (
     <AnimatePresence initial={false}>
       {isExpanded && (
-        <div className="rb-screen-overlay">
+        <div className="rb-screen-overlay" onClick={collapse}>
           <motion.div
             layout
             layoutId={layoutId}
             transition={{ duration: animationDuration }}
             style={{ borderRadius: contentRadius }}
             className={`rb-screen-content ${className}`}
+            onClick={(event) => event.stopPropagation()}
           >
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.12, duration: 0.3 }}>
               {children}

@@ -1,5 +1,5 @@
 import gsap from "gsap";
-import { ChevronLeft, ChevronRight, Gift, Mail, Paperclip, Play, Sparkles, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight, Gift, Mail, Paperclip, Play, Sparkles, Star, X } from "lucide-react";
 import { motion } from "motion/react";
 import React from "react";
 import { createRoot } from "react-dom/client";
@@ -157,14 +157,24 @@ function PartyDecorations() {
 }
 
 function StoryProgress({ activePage }) {
+  const navigate = useNavigate();
+
   return (
-    <div className="story-progress" aria-hidden="true">
+    <nav className="story-progress" aria-label="Birthday pages">
       {pages.map((page) => (
-        <span className={activePage === page.name ? "active" : ""} key={page.name}>
+        <button
+          className={activePage === page.name ? "active" : ""}
+          key={page.name}
+          onClick={() => navigate(page.path)}
+          type="button"
+          aria-label={`Go to ${page.name}`}
+          aria-current={activePage === page.name ? "page" : undefined}
+          title={page.name}
+        >
           {activePage === page.name && <Sparkles size={18} />}
-        </span>
+        </button>
       ))}
-    </div>
+    </nav>
   );
 }
 
@@ -300,6 +310,24 @@ function MemoryCarousel({ memories }) {
     if (card) card.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
   }, [activeIndex]);
 
+  React.useEffect(() => {
+    if (expandedIndex === null) return undefined;
+
+    document.body.style.overflow = "hidden";
+
+    function onKeyDown(event) {
+      if (event.key === "Escape") setExpandedIndex(null);
+      if (event.key === "ArrowLeft") previousMemory();
+      if (event.key === "ArrowRight") nextMemory();
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [expandedIndex]);
+
   function previousMemory() {
     setActiveIndex((index) => (index - 1 + memories.length) % memories.length);
   }
@@ -351,11 +379,23 @@ function MemoryCarousel({ memories }) {
       <button className="carousel-button carousel-button-right" onClick={nextMemory} aria-label="Next memory">
         <ChevronRight size={22} />
       </button>
+      <div className="carousel-dots" aria-label="Memory slides">
+        {memories.map((memory, index) => (
+          <button
+            className={activeIndex === index ? "active" : ""}
+            key={memory.caption}
+            onClick={() => setActiveIndex(index)}
+            type="button"
+            aria-label={`Show memory ${index + 1}: ${memory.caption}`}
+            aria-current={activeIndex === index ? "true" : undefined}
+          />
+        ))}
+      </div>
       {expandedMemory && (
         <div className="memory-lightbox" role="dialog" aria-modal="true" aria-label={expandedMemory.caption} onClick={() => setExpandedIndex(null)}>
           <figure className="memory-lightbox-card" onClick={(event) => event.stopPropagation()}>
             <button className="lightbox-close" onClick={() => setExpandedIndex(null)} aria-label="Close enlarged memory">
-              X
+              <X size={20} />
             </button>
             <img src={expandedMemory.image} alt={expandedMemory.alt} />
             <figcaption>{expandedMemory.caption}</figcaption>
