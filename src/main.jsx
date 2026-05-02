@@ -1,6 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { ChevronLeft, ChevronRight, Gift, Heart, Mail, Paperclip, Play, Sparkles, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight, Gift, Mail, Paperclip, Play, Sparkles, Star } from "lucide-react";
 import { motion } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -111,7 +111,7 @@ function App() {
         });
 
         gsap.fromTo(
-          ".love-thread",
+          ".party-thread",
           { scaleY: 0, transformOrigin: "top center" },
           {
             scaleY: 1,
@@ -152,8 +152,8 @@ function App() {
       <Header goTo={scrollToChapter} />
       <main>
         <div className="story-scroll-shell">
-          <div className="love-thread" aria-hidden="true" />
-          <HeartIllustrations />
+          <div className="party-thread" aria-hidden="true" />
+          <PartyDecorations />
           <StoryProgress activePage={activePage} />
           <section className="story-chapter" data-page="Envelope" ref={(node) => setSectionRef("Envelope", node)}>
             <Envelope goTo={scrollToChapter} />
@@ -174,17 +174,18 @@ function App() {
   );
 }
 
-function HeartIllustrations() {
+function PartyDecorations() {
   return (
-    <div className="heart-illustrations" aria-hidden="true">
-      <img className="heartbeat-gif heartbeat-gif-1 story-drift" src="/assets/heartbeat-heart.gif" alt="" />
-      <img className="heartbeat-gif heartbeat-gif-2 story-drift" src="/assets/heartbeat-heart.gif" alt="" />
-      <span className="heart-illo heart-illo-1" />
-      <span className="heart-illo heart-illo-2" />
-      <span className="heart-illo heart-illo-3" />
-      <span className="heart-illo heart-illo-4" />
-      <span className="heart-illo heart-illo-5" />
-      <span className="heart-illo heart-illo-6" />
+    <div className="party-decorations" aria-hidden="true">
+      <span className="balloon balloon-coral story-drift" />
+      <span className="balloon balloon-gold story-drift" />
+      <span className="balloon balloon-sky story-drift" />
+      <span className="streamer streamer-one" />
+      <span className="streamer streamer-two" />
+      <span className="streamer streamer-three" />
+      {Array.from({ length: 18 }).map((_, index) => (
+        <span className={`confetti-bit confetti-${index + 1}`} key={index} />
+      ))}
     </div>
   );
 }
@@ -194,7 +195,7 @@ function StoryProgress({ activePage }) {
     <div className="story-progress" aria-hidden="true">
       {pages.map((page) => (
         <span className={activePage === page ? "active" : ""} key={page}>
-          {activePage === page && <img src="/assets/heartbeat-heart.gif" alt="" />}
+          {activePage === page && <Sparkles size={18} />}
         </span>
       ))}
     </div>
@@ -205,8 +206,8 @@ function Header({ goTo }) {
   return (
     <header className="site-header">
       <button className="brand" onClick={() => goTo("Envelope")}>{content.siteTitle}</button>
-      <button className="heart-mark" onClick={() => goTo("Envelope")} aria-label="Return to the envelope">
-        <Heart size={28} strokeWidth={1.7} />
+      <button className="heart-mark" onClick={() => goTo("Envelope")} aria-label="Return to the birthday invite">
+        <Gift size={26} strokeWidth={1.8} />
       </button>
     </header>
   );
@@ -218,12 +219,18 @@ function Envelope({ goTo }) {
   function openLetter() {
     if (opening) return;
     setOpening(true);
-    window.setTimeout(() => goTo("Letter"), 360);
+    window.setTimeout(() => goTo("Letter"), 760);
   }
 
   return (
-    <section className="envelope-page">
+    <section className={`envelope-page ${opening ? "is-celebrating" : ""}`}>
+      <div className="hero-confetti-burst" aria-hidden="true">
+        {Array.from({ length: 22 }).map((_, index) => (
+          <span key={index} />
+        ))}
+      </div>
       <div className="envelope-stage animate-in story-drift">
+        <p className="birthday-badge">{content.heroBadge}</p>
         <div
           className={`envelope-card ${opening ? "opening" : ""}`}
           onClick={openLetter}
@@ -233,25 +240,26 @@ function Envelope({ goTo }) {
           role="button"
           tabIndex="0"
         >
-        <div className="paper-texture" />
-        <div className="envelope-lines">
-          <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path d="M0,0 L50,45 L100,0" />
-            <path d="M0,100 L50,45 L100,100" />
-          </svg>
-        </div>
-        <div className="pressed-flower flower-one" />
-        <div className="envelope-cover-copy">
-          <img className="cover-heart-gif" src="/assets/heartbeat-heart.gif" alt="" />
-          <span>To you</span>
-          <strong>Happy birthday</strong>
-          <small>sealed with all my favorite little feelings</small>
-        </div>
-        <button className="seal" aria-label="Open letter">
-          <Mail size={32} strokeWidth={1.7} />
-          <span>Open</span>
-        </button>
-        <div className="pressed-flower flower-two" />
+          <div className="gift-wrap-texture" />
+          <div className="gift-ribbon gift-ribbon-vertical" />
+          <div className="gift-ribbon gift-ribbon-horizontal" />
+          <div className="gift-bow">
+            <span />
+            <span />
+          </div>
+          <div className="party-tag">
+            <Sparkles size={18} />
+            <span>{content.cakeWishLabel}</span>
+          </div>
+          <div className="envelope-cover-copy">
+            <span>{content.heroKicker}</span>
+            <strong>Happy birthday</strong>
+            <small>{content.heroSubline}</small>
+          </div>
+          <button className="seal" aria-label="Open birthday wish">
+            <Gift size={32} strokeWidth={1.7} />
+            <span>Open</span>
+          </button>
         </div>
         <p className="delivery-note">{content.envelopeNote}</p>
       </div>
@@ -282,7 +290,7 @@ function Letter({ goTo }) {
         <div className="bottom-tape" />
         <img className="pressed-letter-flower" alt="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAn-pI_mQ807094KzX68p8L_H_0B4J38I8B00v2N_n2V7H4U8r7k8yX" />
         <button className="story-action letter-action animate-in" onClick={() => goTo("Memories")}>
-          <span>Turn the page</span>
+          <span>Start the memory party</span>
           <Sparkles size={20} />
         </button>
       </article>
@@ -293,15 +301,15 @@ function Letter({ goTo }) {
 function Memories({ goTo }) {
   return (
     <section className="paper-page memories-page">
-      <PageIntro title="Memory Wall" text={content.memoriesIntro} />
+      <PageIntro title="Memory Party" text={content.memoriesIntro} />
       <div className="memory-experiment-board animate-in">
         <div className="memory-bounce-copy memory-note-card">
-          <span>All these little days</span>
+          <span>Snapshots worth celebrating</span>
           <small>{content.memoryNote}</small>
         </div>
         <MemoryCarousel memories={content.memoryCarousel} />
         <button className="story-action memories-action animate-in" onClick={() => goTo("Surprises")}>
-          <span>Open little joys</span>
+          <span>{content.openSurprisesLabel}</span>
           <Gift size={20} />
         </button>
       </div>
@@ -390,7 +398,7 @@ function Surprises({ goTo }) {
 
   return (
     <section className="paper-page surprises-page">
-      <PageIntro title="Little Joys" text={content.surprisesIntro} />
+      <PageIntro title="Make a Wish" text={content.surprisesIntro} />
       <BirthdayReveal video={content.video} />
       <p className="finale-note animate-in">{content.finaleNote}</p>
       <div className="surprise-board experiment-surprise-board">
@@ -404,7 +412,7 @@ function Surprises({ goTo }) {
           />
         ))}
         <button className="story-action surprises-action animate-in" onClick={() => goTo("Envelope")}>
-          <span>Start again</span>
+          <span>Replay the party</span>
           <Mail size={20} />
         </button>
       </div>
@@ -418,7 +426,7 @@ function BirthdayReveal({ video }) {
       <div className="birthday-video-card animate-in">
         <ExpandableScreenTrigger>
           <button className="video-note-trigger">
-            <span>Birthday wishes</span>
+            <span>Birthday Wish</span>
             <small>{video.caption}</small>
             <Play size={22} fill="currentColor" />
           </button>
@@ -448,11 +456,11 @@ function ExpandableSurprise({ surprise, index, openSurprise, setOpenSurprise }) 
     >
       <ExpandableTrigger className="surprise-card-button">
         {surprise.icon === "gift" && <Gift size={44} />}
-        {surprise.icon === "heart" && <Heart size={44} />}
+        {surprise.icon === "heart" && <Sparkles size={44} />}
         {surprise.icon === "star" && <Star size={44} />}
         {surprise.icon === "photo" && <img className="surprise-photo" src={surprise.message} alt={surprise.title} draggable="false" />}
         <h2>{surprise.title}</h2>
-        {surprise.icon !== "photo" && <p>{isOpen ? "Close this note" : "Open this note"}</p>}
+        {surprise.icon !== "photo" && <p>{isOpen ? "Close this wish" : "Open this wish"}</p>}
       </ExpandableTrigger>
       <ExpandableContent className="surprise-expanded-message">
         <p>{surprise.icon === "photo" ? surprise.title : surprise.message}</p>

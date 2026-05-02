@@ -1,25 +1,30 @@
 // Edit this file to personalize the keepsake.
 // Replace placeholder image URLs, letter text, track links, and surprise messages here.
 export const content = {
-  siteTitle: "For Your Birthday",
-  envelopeNote: "A small world of love, folded up and waiting for you.",
-  memoriesIntro: "A soft little gallery of days I would keep choosing.",
+  siteTitle: "Birthday Party For You",
+  heroBadge: "Confetti loaded",
+  heroKicker: "Today's main event",
+  heroSubline: "a tiny party packed with wishes, memories, and surprises",
+  cakeWishLabel: "Make a wish",
+  openSurprisesLabel: "Open Surprises",
+  envelopeNote: "Tap the gift and let the birthday magic spill out.",
+  memoriesIntro: "A bright little gallery of favorite moments, saved like party photos on the wall.",
   soundtrackIntro: "A little playlist for the moments that feel impossible to put into words.",
-  surprisesIntro: "Tiny hidden joys, because loving you has always been in the details.",
-  memoryNote: "Every photo is a small proof: I was here, you were here, and somehow the day became golden.",
+  surprisesIntro: "Tiny hidden birthday wishes, because the best surprises are saved for the end.",
+  memoryNote: "Every photo is a little candle: proof that the day got brighter because you were in it.",
   soundtrackNote: "Press a song and imagine me saving this exact feeling for you.",
-  finaleNote: "No grand speech here. Just me, quietly grateful that you exist.",
+  finaleNote: "One more wish before the candles go out: I hope this year feels bright, easy, funny, and fully yours.",
   letter: {
     date: "October 14th",
-    greeting: "My Dearest,",
-    sideNote: "Remember the rain in Paris? Still my favorite day.",
+    greeting: "Birthday Star,",
+    sideNote: "Wish first. Cake after. No exceptions.",
     paragraphs: [
       "As I sit down to write this, surrounded by the quiet hum of the morning, I find myself overwhelmed by a profound sense of gratitude. Looking back through the pages we've filled together, it feels like only yesterday that our story began to unfold.",
       "I wanted to create this space, this little folded-up collection of moments, not just as a celebration of the day you were born, but as a testament to the beautiful, messy, wonderfully chaotic life we've built.",
       "You have this incredible ability to make ordinary days feel extraordinary. Whether it's a shared glance across a crowded room or a quiet Sunday morning with coffee, it's all better simply because you're there.",
       "Take your time wandering through these memories. Some might make you laugh, and some might bring a tear to your eye, but they are all entirely ours."
     ],
-    signoffLine: "With all my love,",
+    signoffLine: "With the biggest birthday cheer,",
     signature: "Always"
   },
   memories: [
@@ -109,10 +114,10 @@ export const content = {
     caption: "A little place for a happy birthday video."
   },
   surprises: [
-    { icon: "gift", title: "Open Me", message: "A tiny reminder that you are loved beyond measure." },
-    { icon: "heart", title: "Just a Little Reminder", message: "You are loved more than you know. Here is to making more beautiful memories together this year." },
+    { icon: "gift", title: "Birthday Boost", message: "A tiny reminder that you are loved, celebrated, and very easy to cheer for." },
+    { icon: "heart", title: "Sparkle Reminder", message: "You make ordinary days feel like there should be confetti somewhere nearby." },
     { icon: "photo", title: "That one perfect afternoon...", message: "https://lh3.googleusercontent.com/aida-public/AB6AXuClGZWKVi_DpLv3AXP6ppTBGEXAGynAFOgE96dlXL4o0VgNYgUxsmisj5hoMXJvBc8Q8zzinNNThqBAt-I0Y8TXWYWI_QSAxyz3cqc8BcmXIKJnekdLtVXHAgQNCL8MNCee4DwWehQJTSCIQZwx_z5o_SdeqsawSp5QB_uNwdCLPG0rSYLmK37-0CYcD_mB17QZd05H1ogQKq_gmx524ZY0AK5AiQx7UmRkbMzE2v-BZf0z-Dp86_g4Y0feHDeiGjc-MVN4G8l08-U1" },
-    { icon: "heart", title: "One Million Kisses", message: "Delivered virtually." },
+    { icon: "heart", title: "Virtual Candle", message: "Make one extra wish. I am quietly rooting for it." },
     { icon: "star", title: "Pop?", message: "A tiny question mark with one sweet surprise tucked inside." },
     { icon: "gift", title: "Secret Plan", message: "A day with no errands, no rush, and your favorite dessert." }
   ]
