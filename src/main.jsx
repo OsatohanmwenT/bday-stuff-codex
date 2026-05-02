@@ -77,14 +77,15 @@ function App() {
         const items = chapter.querySelectorAll(".animate-in");
         gsap.fromTo(
           items,
-          prefersReducedMotion ? { opacity: 1 } : { y: 26, rotate: "-=1", opacity: 0 },
+          prefersReducedMotion ? { opacity: 1 } : { y: 42, rotate: "-=3", skewY: 2, opacity: 0 },
           {
             y: 0,
-            rotate: "+=1",
+            rotate: "+=3",
+            skewY: 0,
             opacity: 1,
-            duration: prefersReducedMotion ? 0 : 0.9,
-            stagger: prefersReducedMotion ? 0 : 0.07,
-            ease: "power3.out",
+            duration: prefersReducedMotion ? 0 : 0.46,
+            stagger: prefersReducedMotion ? 0 : 0.045,
+            ease: "back.out(1.65)",
             scrollTrigger: prefersReducedMotion
               ? undefined
               : {
@@ -99,13 +100,13 @@ function App() {
       if (!prefersReducedMotion) {
         gsap.utils.toArray(".story-drift").forEach((item) => {
           gsap.to(item, {
-            y: -28,
-            ease: "none",
+            y: -18,
+            ease: "steps(5)",
             scrollTrigger: {
               trigger: item,
               start: "top bottom",
               end: "bottom top",
-              scrub: 0.8
+              scrub: 0.35
             }
           });
         });
@@ -115,12 +116,12 @@ function App() {
           { scaleY: 0, transformOrigin: "top center" },
           {
             scaleY: 1,
-            ease: "none",
+            ease: "steps(8)",
             scrollTrigger: {
               trigger: ".story-scroll-shell",
               start: "top top",
               end: "bottom bottom",
-              scrub: 0.6
+              scrub: 0.25
             }
           }
         );
@@ -219,7 +220,7 @@ function Envelope({ goTo }) {
   function openLetter() {
     if (opening) return;
     setOpening(true);
-    window.setTimeout(() => goTo("Letter"), 760);
+    window.setTimeout(() => goTo("Letter"), 480);
   }
 
   return (
@@ -382,7 +383,7 @@ function MemoryCarousel({ memories }) {
         <div className="memory-lightbox" role="dialog" aria-modal="true" aria-label={expandedMemory.caption} onClick={() => setExpandedIndex(null)}>
           <figure className="memory-lightbox-card" onClick={(event) => event.stopPropagation()}>
             <button className="lightbox-close" onClick={() => setExpandedIndex(null)} aria-label="Close enlarged memory">
-              ×
+              X
             </button>
             <img src={expandedMemory.image} alt={expandedMemory.alt} />
             <figcaption>{expandedMemory.caption}</figcaption>
@@ -422,7 +423,7 @@ function Surprises({ goTo }) {
 
 function BirthdayReveal({ video }) {
   return (
-    <ExpandableScreen layoutId="birthday-video-reveal" triggerRadius="6px" contentRadius="8px">
+    <ExpandableScreen layoutId="birthday-video-reveal" triggerRadius="2px" contentRadius="2px" animationDuration={0.24}>
       <div className="birthday-video-card animate-in">
         <ExpandableScreenTrigger>
           <button className="video-note-trigger">
@@ -453,6 +454,7 @@ function ExpandableSurprise({ surprise, index, openSurprise, setOpenSurprise }) 
       expanded={isOpen}
       onToggle={() => setOpenSurprise(isOpen ? null : index)}
       className={`surprise-card surprise-${index + 1} ${isOpen ? "is-open" : ""} animate-in`}
+      transitionDuration={0.22}
     >
       <ExpandableTrigger className="surprise-card-button">
         {surprise.icon === "gift" && <Gift size={44} />}
@@ -489,3 +491,4 @@ function Footer() {
 }
 
 createRoot(document.getElementById("root")).render(<App />);
+
