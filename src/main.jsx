@@ -24,6 +24,34 @@ function pageForPath(pathname) {
   return pageByPath.get(pathname) || (pathname === "/soundtrack" ? "Memories" : "Envelope");
 }
 
+function routeKeyForPath(pathname) {
+  if (pathname === "/soundtrack") return "memories";
+  return pageForPath(pathname).toLowerCase();
+}
+
+const routeMotion = {
+  envelope: {
+    stage: ".envelope-stage",
+    focus: ".envelope-card",
+    accents: ".gift-ribbon, .gift-bow, .party-tag, .seal, .delivery-note"
+  },
+  letter: {
+    stage: ".letter-paper",
+    focus: ".date-line, .letter-paper h1, .letter-reveal-line, .signoff, .letter-action",
+    accents: ".tape, .bottom-tape, .sticky-note, .paperclip"
+  },
+  memories: {
+    stage: ".memory-experiment-board",
+    focus: ".memory-carousel-wrap",
+    accents: ".memory-bounce-copy, .carousel-polaroid, .carousel-dots button, .memories-action"
+  },
+  surprises: {
+    stage: ".page-intro",
+    focus: ".birthday-video-card",
+    accents: ".finale-note, .surprises-action"
+  }
+};
+
 function App() {
   return (
     <BrowserRouter>
@@ -35,11 +63,36 @@ function App() {
 function BirthdayRoutes() {
   const location = useLocation();
   const activePage = pageForPath(location.pathname);
+  const activeRoute = routeKeyForPath(location.pathname);
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const timeout = window.setTimeout(() => setIsLoading(false), prefersReducedMotion ? 700 : 1900);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      window.clearTimeout(timeout);
+      document.body.style.overflow = "";
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (!isLoading) document.body.style.overflow = "";
+  }, [isLoading]);
+
+  if (isLoading) {
+    return (
+      <div className="app-shell">
+        <BirthdayLoader />
+      </div>
+    );
+  }
 
   return (
     <div className="app-shell">
       <Header />
-      <main className="route-stage">
+      <main className={`route-stage route-${activeRoute}`}>
         <PartyDecorations />
         <StoryProgress activePage={activePage} />
         <Routes location={location}>
@@ -85,9 +138,35 @@ function BirthdayRoutes() {
   );
 }
 
+function BirthdayLoader() {
+  return (
+    <main className="birthday-loader" aria-label="Loading birthday surprise" aria-live="polite">
+      <div className="loader-confetti" aria-hidden="true">
+        {Array.from({ length: 18 }).map((_, index) => (
+          <span key={index} />
+        ))}
+      </div>
+      <section className="loader-card">
+        <div className="loader-gift" aria-hidden="true">
+          <span className="loader-ribbon loader-ribbon-vertical" />
+          <span className="loader-ribbon loader-ribbon-horizontal" />
+          <Gift size={48} strokeWidth={1.7} />
+        </div>
+        <p>Wrapping the birthday magic</p>
+        <h1>{content.siteTitle}</h1>
+        <div className="loader-progress" aria-hidden="true">
+          <span />
+        </div>
+      </section>
+    </main>
+  );
+}
+
 function RoutePage({ children }) {
   const pageRef = React.useRef(null);
   const location = useLocation();
+  const routeKey = routeKeyForPath(location.pathname);
+  const motionConfig = routeMotion[routeKey];
 
   React.useEffect(() => {
     const page = pageRef.current;
@@ -99,6 +178,9 @@ function RoutePage({ children }) {
     const ctx = gsap.context(() => {
       const items = page.querySelectorAll(".animate-in");
       const partyThread = document.querySelector(".party-thread");
+      const routeStage = motionConfig?.stage ? page.querySelector(motionConfig.stage) : null;
+      const routeFocus = motionConfig?.focus ? page.querySelectorAll(motionConfig.focus) : [];
+      const routeAccents = motionConfig?.accents ? page.querySelectorAll(motionConfig.accents) : [];
 
       gsap.fromTo(
         page,
@@ -126,9 +208,43 @@ function RoutePage({ children }) {
       }
 
       if (!prefersReducedMotion) {
+        const routeTimeline = gsap.timeline({ delay: 0.05 });
+
         if (partyThread) {
           gsap.fromTo(partyThread, { scaleY: 0, transformOrigin: "top center" }, { scaleY: 1, duration: 0.8, ease: "power3.out" });
         }
+
+        if (routeStage) {
+          routeTimeline.fromTo(
+            routeStage,
+            { opacity: 0, scale: routeKey === "letter" ? 0.96 : 0.92, rotate: routeKey === "letter" ? -4 : -2 },
+            { opacity: 1, scale: 1, rotate: 0, duration: 0.72, ease: "back.out(1.45)" },
+            0
+          );
+        }
+
+        if (routeFocus.length) {
+          routeTimeline.fromTo(
+            routeFocus,
+            { opacity: 0, y: routeKey === "envelope" ? 18 : 28, scale: routeKey === "memories" ? 0.9 : 1 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.64, stagger: 0.06, ease: "power3.out" },
+            routeKey === "envelope" ? 0.08 : 0.18
+          );
+        }
+
+        if (routeAccents.length) {
+          routeTimeline.fromTo(
+            routeAccents,
+            { opacity: 0, y: 18, rotate: routeKey === "surprises" ? -5 : 4, scale: 0.94 },
+            { opacity: 1, y: 0, rotate: 0, scale: 1, duration: 0.52, stagger: 0.045, ease: "back.out(1.7)" },
+            routeKey === "surprises" ? 0.22 : 0.3
+          );
+        }
+
+        if (routeKey === "envelope") {
+          routeTimeline.fromTo(".hero-confetti-burst span", { opacity: 0, scale: 0.2 }, { opacity: 0.55, scale: 0.8, duration: 0.2, stagger: 0.008, yoyo: true, repeat: 1 }, 0.28);
+        }
+
         gsap.to(page.querySelectorAll(".story-drift"), { y: -10, duration: 2.4, repeat: -1, yoyo: true, ease: "sine.inOut" });
       }
     }, pageRef);
@@ -136,7 +252,7 @@ function RoutePage({ children }) {
     return () => ctx.revert();
   }, [location.pathname]);
 
-  return <section className="route-page" ref={pageRef}>{children}</section>;
+  return <section className={`route-page route-page-${routeKey}`} ref={pageRef}>{children}</section>;
 }
 
 function PartyDecorations() {
