@@ -14,7 +14,7 @@
   --shadow: 8px 8px 0 var(--ink);
   --shadow-lg: 14px 14px 0 var(--ink);
   --border: 4px solid var(--ink);
-  --snap: cubic-bezier(0.2, 1.35, 0.35, 1);
+  --snap: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 * {
@@ -24,6 +24,7 @@
 html {
   background: var(--paper);
   scroll-behavior: smooth;
+  scroll-padding-top: 72px;
 }
 
 body {
@@ -120,7 +121,7 @@ main {
 }
 
 .story-chapter + .story-chapter {
-  border-top: var(--border);
+  border-top: 2px solid rgba(17, 17, 17, 0.22);
 }
 
 .party-thread {
@@ -134,6 +135,7 @@ main {
   background: repeating-linear-gradient(to bottom, var(--hot) 0 28px, var(--yellow) 28px 56px, var(--blue) 56px 84px, var(--green) 84px 112px);
   box-shadow: 6px 6px 0 var(--ink);
   pointer-events: none;
+  transform-origin: top center;
 }
 
 .party-decorations {
@@ -151,7 +153,7 @@ main {
   border: var(--border);
   border-radius: 50% 50% 42% 42%;
   box-shadow: 6px 6px 0 var(--ink);
-  animation: balloonFloat 4.8s steps(4) infinite;
+  animation: balloonFloat 7s ease-in-out infinite;
 }
 
 .balloon::after {
@@ -233,7 +235,7 @@ main {
   border: 3px solid var(--ink);
   background: var(--hot);
   opacity: 0.95;
-  animation: confettiDrift 6s steps(6) infinite;
+  animation: confettiDrift 9s linear infinite;
 }
 
 .confetti-1 { top: 12vh; left: 22vw; background: var(--yellow); animation-delay: -1s; }
@@ -310,18 +312,18 @@ main {
   font-size: 15px;
   font-weight: 900;
   text-transform: uppercase;
-  transition: transform 0.14s var(--snap), box-shadow 0.14s var(--snap), background 0.14s ease;
+  transition: transform 0.28s var(--snap), box-shadow 0.28s var(--snap), background 0.28s ease;
 }
 
 .story-action:hover {
   background: var(--yellow);
-  box-shadow: 3px 3px 0 var(--ink);
-  transform: translate(5px, 5px) rotate(-1deg);
+  box-shadow: 5px 5px 0 var(--ink);
+  transform: translate(3px, 3px) rotate(-1deg);
 }
 
 .story-action:active {
-  box-shadow: 0 0 0 var(--ink);
-  transform: translate(8px, 8px) scale(0.98);
+  box-shadow: 2px 2px 0 var(--ink);
+  transform: translate(6px, 6px) scale(0.98);
 }
 
 .envelope-page {
@@ -385,12 +387,12 @@ main {
     repeating-linear-gradient(135deg, var(--hot) 0 24px, var(--red) 24px 48px);
   box-shadow: var(--shadow-lg);
   transform: rotate(-2deg);
-  transition: transform 0.22s var(--snap), box-shadow 0.22s var(--snap), filter 0.16s ease;
+  transition: transform 0.45s var(--snap), box-shadow 0.45s var(--snap), filter 0.3s ease;
 }
 
 .envelope-card:hover {
-  box-shadow: 6px 6px 0 var(--ink);
-  transform: translate(8px, 8px) rotate(1deg);
+  box-shadow: 9px 9px 0 var(--ink);
+  transform: translate(5px, 5px) rotate(0deg);
 }
 
 .envelope-card.opening {
@@ -412,7 +414,7 @@ main {
   z-index: 1;
   border: var(--border);
   background: var(--yellow);
-  transition: transform 0.22s var(--snap);
+  transition: transform 0.42s var(--snap);
 }
 
 .gift-ribbon-vertical {
@@ -447,7 +449,7 @@ main {
   display: flex;
   gap: 8px;
   transform: translateX(-50%);
-  transition: opacity 0.18s ease, transform 0.22s var(--snap);
+  transition: opacity 0.3s ease, transform 0.42s var(--snap);
 }
 
 .gift-bow span {
@@ -547,13 +549,13 @@ main {
   color: var(--ink);
   text-transform: uppercase;
   transform: translateX(-50%);
-  transition: transform 0.14s var(--snap), box-shadow 0.14s var(--snap), background 0.14s ease;
+  transition: transform 0.28s var(--snap), box-shadow 0.28s var(--snap), background 0.28s ease;
 }
 
 .seal:hover {
   background: var(--yellow);
-  box-shadow: 2px 2px 0 var(--ink);
-  transform: translateX(calc(-50% + 5px)) translateY(5px);
+  box-shadow: 4px 4px 0 var(--ink);
+  transform: translateX(calc(-50% + 3px)) translateY(3px);
 }
 
 .seal span {
@@ -586,7 +588,7 @@ main {
 }
 
 .is-celebrating .hero-confetti-burst span {
-  animation: burst 0.5s steps(4) forwards;
+  animation: burst 0.72s var(--snap) forwards;
 }
 
 .hero-confetti-burst span:nth-child(3n) { background: var(--blue); }
@@ -917,7 +919,7 @@ main {
   cursor: grab;
   user-select: none;
   transform: rotate(-2deg) scale(0.94);
-  transition: transform 0.18s var(--snap), box-shadow 0.18s var(--snap), filter 0.18s ease;
+  transition: transform 0.32s var(--snap), box-shadow 0.32s var(--snap), filter 0.32s ease;
 }
 
 .carousel-polaroid:nth-child(even) {
@@ -925,9 +927,9 @@ main {
 }
 
 .carousel-polaroid:hover {
-  box-shadow: 4px 4px 0 var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
   filter: saturate(1.12) contrast(1.05);
-  transform: translate(4px, 4px) rotate(0deg) scale(0.98);
+  transform: translate(3px, 3px) rotate(0deg) scale(0.98);
 }
 
 .carousel-polaroid.is-active {
@@ -988,7 +990,7 @@ main {
   background: var(--yellow);
   box-shadow: 5px 5px 0 var(--ink);
   color: var(--ink);
-  transition: transform 0.14s var(--snap), box-shadow 0.14s var(--snap), background 0.14s ease;
+  transition: transform 0.26s var(--snap), box-shadow 0.26s var(--snap), background 0.26s ease;
 }
 
 .carousel-button {
@@ -1019,7 +1021,7 @@ main {
   place-items: center;
   padding: 28px;
   background: rgba(17, 17, 17, 0.62);
-  animation: fadeIn 0.12s steps(2) both;
+  animation: fadeIn 0.24s ease both;
 }
 
 .memory-lightbox-card {
@@ -1029,7 +1031,7 @@ main {
   margin: 0;
   padding: 18px 18px 68px;
   background: var(--white);
-  animation: popIn 0.18s var(--snap) both;
+  animation: popIn 0.32s var(--snap) both;
 }
 
 .memory-lightbox-card::before {
@@ -1165,13 +1167,13 @@ main {
   color: var(--ink);
   text-align: center;
   transform: rotate(-2deg);
-  transition: transform 0.14s var(--snap), box-shadow 0.14s var(--snap), background 0.14s ease;
+  transition: transform 0.28s var(--snap), box-shadow 0.28s var(--snap), background 0.28s ease;
 }
 
 .video-note-trigger:hover {
   background: var(--green);
-  box-shadow: 3px 3px 0 var(--ink);
-  transform: translate(5px, 5px) rotate(0deg);
+  box-shadow: 5px 5px 0 var(--ink);
+  transform: translate(3px, 3px) rotate(0deg);
 }
 
 .video-note-trigger span {
@@ -1350,7 +1352,7 @@ main {
   padding: 0;
   color: var(--ink);
   text-align: center;
-  transition: transform 0.14s var(--snap), box-shadow 0.14s var(--snap), background 0.14s ease;
+  transition: transform 0.3s var(--snap), box-shadow 0.3s var(--snap), background 0.3s ease;
 }
 
 .surprise-card::before {
@@ -1369,8 +1371,8 @@ main {
 
 .surprise-card.is-open {
   z-index: 8;
-  box-shadow: 3px 3px 0 var(--ink);
-  transform: translate(5px, 5px) rotate(0deg) !important;
+  box-shadow: 5px 5px 0 var(--ink);
+  transform: translate(3px, 3px) rotate(0deg) !important;
 }
 
 .surprise-card-button {
@@ -1388,8 +1390,8 @@ main {
 }
 
 .surprise-card:hover {
-  box-shadow: 3px 3px 0 var(--ink);
-  transform: translate(5px, 5px) rotate(0deg) !important;
+  box-shadow: 5px 5px 0 var(--ink);
+  transform: translate(3px, 3px) rotate(0deg) !important;
 }
 
 .surprise-card h2 {
@@ -1483,7 +1485,7 @@ main {
 }
 
 @keyframes popIn {
-  from { opacity: 0; transform: translateY(20px) scale(0.94) rotate(-3deg); }
+  from { opacity: 0; transform: translateY(16px) scale(0.96) rotate(-2deg); }
   to { opacity: 1; transform: translateY(0) scale(1) rotate(-1deg); }
 }
 

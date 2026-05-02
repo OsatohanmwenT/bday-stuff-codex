@@ -77,15 +77,14 @@ function App() {
         const items = chapter.querySelectorAll(".animate-in");
         gsap.fromTo(
           items,
-          prefersReducedMotion ? { opacity: 1 } : { y: 42, rotate: "-=3", skewY: 2, opacity: 0 },
+          prefersReducedMotion ? { opacity: 1 } : { y: 28, rotate: "-=1", opacity: 0 },
           {
             y: 0,
-            rotate: "+=3",
-            skewY: 0,
+            rotate: "+=1",
             opacity: 1,
-            duration: prefersReducedMotion ? 0 : 0.46,
-            stagger: prefersReducedMotion ? 0 : 0.045,
-            ease: "back.out(1.65)",
+            duration: prefersReducedMotion ? 0 : 0.86,
+            stagger: prefersReducedMotion ? 0 : 0.07,
+            ease: "power3.out",
             scrollTrigger: prefersReducedMotion
               ? undefined
               : {
@@ -100,13 +99,13 @@ function App() {
       if (!prefersReducedMotion) {
         gsap.utils.toArray(".story-drift").forEach((item) => {
           gsap.to(item, {
-            y: -18,
-            ease: "steps(5)",
+            y: -24,
+            ease: "none",
             scrollTrigger: {
               trigger: item,
               start: "top bottom",
               end: "bottom top",
-              scrub: 0.35
+              scrub: 0.85
             }
           });
         });
@@ -116,12 +115,12 @@ function App() {
           { scaleY: 0, transformOrigin: "top center" },
           {
             scaleY: 1,
-            ease: "steps(8)",
+            ease: "none",
             scrollTrigger: {
               trigger: ".story-scroll-shell",
               start: "top top",
               end: "bottom bottom",
-              scrub: 0.25
+              scrub: 0.7
             }
           }
         );
@@ -220,7 +219,7 @@ function Envelope({ goTo }) {
   function openLetter() {
     if (opening) return;
     setOpening(true);
-    window.setTimeout(() => goTo("Letter"), 480);
+    window.setTimeout(() => goTo("Letter"), 680);
   }
 
   return (
@@ -423,7 +422,7 @@ function Surprises({ goTo }) {
 
 function BirthdayReveal({ video }) {
   return (
-    <ExpandableScreen layoutId="birthday-video-reveal" triggerRadius="2px" contentRadius="2px" animationDuration={0.24}>
+    <ExpandableScreen layoutId="birthday-video-reveal" triggerRadius="4px" contentRadius="6px" animationDuration={0.34}>
       <div className="birthday-video-card animate-in">
         <ExpandableScreenTrigger>
           <button className="video-note-trigger">
@@ -454,7 +453,7 @@ function ExpandableSurprise({ surprise, index, openSurprise, setOpenSurprise }) 
       expanded={isOpen}
       onToggle={() => setOpenSurprise(isOpen ? null : index)}
       className={`surprise-card surprise-${index + 1} ${isOpen ? "is-open" : ""} animate-in`}
-      transitionDuration={0.22}
+      transitionDuration={0.34}
     >
       <ExpandableTrigger className="surprise-card-button">
         {surprise.icon === "gift" && <Gift size={44} />}
