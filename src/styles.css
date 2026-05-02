@@ -260,6 +260,72 @@ main {
 .loader-confetti span:nth-child(17) { --x: -210px; --y: 250px; --r: 200deg; animation-delay: 1.28s; }
 .loader-confetti span:nth-child(18) { --x: 215px; --y: 255px; --r: 90deg; animation-delay: 1.36s; }
 
+.route-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.route-transition-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 55vw;
+  border: var(--border);
+  background:
+    linear-gradient(90deg, transparent 44%, var(--ink) 44% 46%, var(--yellow) 46% 54%, var(--ink) 54% 56%, transparent 56%),
+    repeating-linear-gradient(135deg, var(--hot) 0 30px, var(--red) 30px 60px);
+  box-shadow: 8px 8px 0 rgba(17, 17, 17, 0.65);
+  animation: routeWrapLeft 0.64s var(--snap) both;
+}
+
+.route-transition-panel-left {
+  left: 0;
+  transform-origin: left center;
+}
+
+.route-transition-panel-right {
+  right: 0;
+  background:
+    linear-gradient(90deg, transparent 44%, var(--ink) 44% 46%, var(--blue) 46% 54%, var(--ink) 54% 56%, transparent 56%),
+    repeating-linear-gradient(-135deg, var(--green) 0 30px, var(--yellow) 30px 60px);
+  transform-origin: right center;
+  animation-name: routeWrapRight;
+}
+
+.route-transition-card {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  min-width: min(360px, 82vw);
+  justify-items: center;
+  gap: 10px;
+  padding: 24px 30px;
+  border: 6px solid var(--ink);
+  background: var(--white);
+  box-shadow: var(--shadow-lg);
+  color: var(--ink);
+  font-family: "Epilogue", sans-serif;
+  font-weight: 900;
+  text-align: center;
+  text-transform: uppercase;
+  animation: routeCardPop 0.64s var(--snap) both;
+}
+
+.route-transition-card svg {
+  color: var(--ink);
+  filter: drop-shadow(3px 3px 0 var(--yellow));
+}
+
+.route-transition-card span {
+  font-size: clamp(28px, 7vw, 56px);
+  line-height: 0.92;
+}
+
 .route-stage {
   position: relative;
   overflow-x: hidden;
@@ -1988,6 +2054,24 @@ main {
   100% { opacity: 0; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(0.92) rotate(var(--r)); }
 }
 
+@keyframes routeWrapLeft {
+  0% { opacity: 0; transform: translateX(-110%) scaleX(0.92); }
+  24%, 66% { opacity: 1; transform: translateX(0) scaleX(1); }
+  100% { opacity: 0; transform: translateX(-110%) scaleX(0.92); }
+}
+
+@keyframes routeWrapRight {
+  0% { opacity: 0; transform: translateX(110%) scaleX(0.92); }
+  24%, 66% { opacity: 1; transform: translateX(0) scaleX(1); }
+  100% { opacity: 0; transform: translateX(110%) scaleX(0.92); }
+}
+
+@keyframes routeCardPop {
+  0% { opacity: 0; transform: translateY(18px) rotate(-4deg) scale(0.88); }
+  28%, 62% { opacity: 1; transform: translateY(0) rotate(1deg) scale(1); }
+  100% { opacity: 0; transform: translateY(-16px) rotate(4deg) scale(0.92); }
+}
+
 @media (max-width: 900px) {
   .site-header {
     min-height: 72px;
@@ -2250,8 +2334,23 @@ main {
   .loader-card,
   .loader-gift,
   .loader-progress span,
-  .loader-confetti span {
+  .loader-confetti span,
+  .route-transition-panel,
+  .route-transition-card {
     animation: none !important;
+  }
+
+  .route-transition {
+    background: rgba(255, 246, 216, 0.82);
+  }
+
+  .route-transition-panel {
+    display: none;
+  }
+
+  .route-transition-card {
+    opacity: 1;
+    transform: none;
   }
 
   .animate-in,

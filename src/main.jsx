@@ -65,6 +65,9 @@ function BirthdayRoutes() {
   const activePage = pageForPath(location.pathname);
   const activeRoute = routeKeyForPath(location.pathname);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [isRouteTransitioning, setIsRouteTransitioning] = React.useState(false);
+  const [transitionPageLabel, setTransitionPageLabel] = React.useState(activePage);
+  const previousPathRef = React.useRef(location.pathname);
 
   React.useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -81,6 +84,26 @@ function BirthdayRoutes() {
     if (!isLoading) document.body.style.overflow = "";
   }, [isLoading]);
 
+  React.useEffect(() => {
+    if (isLoading) {
+      previousPathRef.current = location.pathname;
+      return undefined;
+    }
+
+    if (previousPathRef.current === location.pathname) return undefined;
+
+    previousPathRef.current = location.pathname;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setTransitionPageLabel(pageForPath(location.pathname));
+    setIsRouteTransitioning(true);
+
+    const timeout = window.setTimeout(() => {
+      setIsRouteTransitioning(false);
+    }, prefersReducedMotion ? 220 : 640);
+
+    return () => window.clearTimeout(timeout);
+  }, [isLoading, location.pathname]);
+
   if (isLoading) {
     return (
       <div className="app-shell">
@@ -92,6 +115,7 @@ function BirthdayRoutes() {
   return (
     <div className="app-shell">
       <Header />
+      {isRouteTransitioning && <RouteTransition label={transitionPageLabel} />}
       <main className={`route-stage route-${activeRoute}`}>
         <PartyDecorations />
         <StoryProgress activePage={activePage} />
@@ -134,6 +158,19 @@ function BirthdayRoutes() {
         </Routes>
       </main>
       <Footer />
+    </div>
+  );
+}
+
+function RouteTransition({ label }) {
+  return (
+    <div className="route-transition" aria-hidden="true">
+      <div className="route-transition-panel route-transition-panel-left" />
+      <div className="route-transition-panel route-transition-panel-right" />
+      <div className="route-transition-card">
+        <Gift size={36} strokeWidth={1.8} />
+        <span>{label}</span>
+      </div>
     </div>
   );
 }
