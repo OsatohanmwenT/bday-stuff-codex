@@ -110,7 +110,7 @@ main {
 
 .route-stage {
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
   min-height: calc(100vh - 72px);
 }
 

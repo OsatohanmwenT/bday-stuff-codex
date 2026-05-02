@@ -102,10 +102,9 @@ function RoutePage({ children }) {
 
       gsap.fromTo(
         page,
-        prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 18 },
+        { opacity: prefersReducedMotion ? 1 : 0 },
         {
           opacity: 1,
-          y: 0,
           duration: prefersReducedMotion ? 0 : 0.42,
           ease: "power2.out"
         }
@@ -465,4 +464,3 @@ function Footer() {
 }
 
 createRoot(document.getElementById("root")).render(<App />);
-
