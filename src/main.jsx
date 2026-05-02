@@ -1,80 +1,117 @@
-import React from "react";
-import { createRoot } from "react-dom/client";
+import gsap from "gsap";
 import { ChevronLeft, ChevronRight, Gift, Mail, Paperclip, Play, Sparkles, Star } from "lucide-react";
 import { motion } from "motion/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import ScrollReveal from "./components/experiments/ScrollReveal";
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { Expandable, ExpandableContent, ExpandableTrigger } from "./components/experiments/Expandable";
 import { ExpandableScreen, ExpandableScreenContent, ExpandableScreenTrigger } from "./components/experiments/ExpandableScreen";
 import HoverVideoPlayer from "./components/experiments/HoverVideoPlayer";
+import ScrollReveal from "./components/experiments/ScrollReveal";
 import { content } from "./content";
 import "./styles.css";
 
-gsap.registerPlugin(ScrollTrigger);
+const pages = [
+  { name: "Envelope", path: "/envelope" },
+  { name: "Letter", path: "/letter" },
+  { name: "Memories", path: "/memories" },
+  { name: "Surprises", path: "/surprises" }
+];
 
-const pages = ["Envelope", "Letter", "Memories", "Surprises"];
+const pageByPath = new Map(pages.map((page) => [page.path, page.name]));
 
-function pathFor(page) {
-  return page === "Envelope" ? "/envelope" : `/${page.toLowerCase()}`;
-}
-
-function currentPage() {
-  const path = window.location.pathname.replace("/", "").toLowerCase();
-  if (!path) return "Envelope";
-  if (path === "soundtrack") return "Memories";
-  return pages.find((page) => page.toLowerCase() === path) || "Envelope";
+function pageForPath(pathname) {
+  return pageByPath.get(pathname) || (pathname === "/soundtrack" ? "Memories" : "Envelope");
 }
 
 function App() {
-  const [activePage, setActivePage] = React.useState(currentPage());
-  const sectionRefs = React.useRef({});
-  const activeRef = React.useRef(currentPage());
-  const didInitialScroll = React.useRef(false);
+  return (
+    <BrowserRouter>
+      <BirthdayRoutes />
+    </BrowserRouter>
+  );
+}
+
+function BirthdayRoutes() {
+  const location = useLocation();
+  const activePage = pageForPath(location.pathname);
+
+  return (
+    <div className="app-shell">
+      <Header />
+      <main className="route-stage">
+        <PartyDecorations />
+        <StoryProgress activePage={activePage} />
+        <Routes location={location}>
+          <Route path="/" element={<Navigate to="/envelope" replace />} />
+          <Route
+            path="/envelope"
+            element={
+              <RoutePage>
+                <Envelope />
+              </RoutePage>
+            }
+          />
+          <Route
+            path="/letter"
+            element={
+              <RoutePage>
+                <Letter />
+              </RoutePage>
+            }
+          />
+          <Route
+            path="/memories"
+            element={
+              <RoutePage>
+                <Memories />
+              </RoutePage>
+            }
+          />
+          <Route
+            path="/surprises"
+            element={
+              <RoutePage>
+                <Surprises />
+              </RoutePage>
+            }
+          />
+          <Route path="/soundtrack" element={<Navigate to="/memories" replace />} />
+          <Route path="*" element={<Navigate to="/envelope" replace />} />
+        </Routes>
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+function RoutePage({ children }) {
+  const pageRef = React.useRef(null);
+  const location = useLocation();
 
   React.useEffect(() => {
-    const onPop = () => scrollToChapter(currentPage(), false);
-    window.addEventListener("popstate", onPop);
-    return () => window.removeEventListener("popstate", onPop);
-  }, []);
+    const page = pageRef.current;
+    if (!page) return undefined;
 
-  React.useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const initialPage = currentPage();
-
-    if (!didInitialScroll.current) {
-      didInitialScroll.current = true;
-      if (window.location.pathname.replace("/", "").toLowerCase() === "soundtrack") {
-        window.history.replaceState({}, "", pathFor("Memories"));
-      }
-      scrollToChapter(initialPage, false, "auto");
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleEntry = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-
-        if (!visibleEntry) return;
-
-        const nextPage = visibleEntry.target.dataset.page;
-        if (!nextPage || activeRef.current === nextPage) return;
-
-        activeRef.current = nextPage;
-        setActivePage(nextPage);
-        window.history.replaceState({}, "", pathFor(nextPage));
-      },
-      { rootMargin: "-38% 0px -45% 0px", threshold: [0.2, 0.45, 0.7] }
-    );
-
-    pages.forEach((page) => {
-      if (sectionRefs.current[page]) observer.observe(sectionRefs.current[page]);
-    });
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 
     const ctx = gsap.context(() => {
-      gsap.utils.toArray(".story-chapter").forEach((chapter) => {
-        const items = chapter.querySelectorAll(".animate-in");
+      const items = page.querySelectorAll(".animate-in");
+      const partyThread = document.querySelector(".party-thread");
+
+      gsap.fromTo(
+        page,
+        prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 18 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: prefersReducedMotion ? 0 : 0.42,
+          ease: "power2.out"
+        }
+      );
+
+      if (items.length) {
         gsap.fromTo(
           items,
           prefersReducedMotion ? { opacity: 1 } : { y: 28, rotate: "-=1", opacity: 0 },
@@ -84,94 +121,23 @@ function App() {
             opacity: 1,
             duration: prefersReducedMotion ? 0 : 0.86,
             stagger: prefersReducedMotion ? 0 : 0.07,
-            ease: "power3.out",
-            scrollTrigger: prefersReducedMotion
-              ? undefined
-              : {
-                  trigger: chapter,
-                  start: "top 68%",
-                  once: true
-                }
-          }
-        );
-      });
-
-      if (!prefersReducedMotion) {
-        gsap.utils.toArray(".story-drift").forEach((item) => {
-          gsap.to(item, {
-            y: -24,
-            ease: "none",
-            scrollTrigger: {
-              trigger: item,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 0.85
-            }
-          });
-        });
-
-        gsap.fromTo(
-          ".party-thread",
-          { scaleY: 0, transformOrigin: "top center" },
-          {
-            scaleY: 1,
-            ease: "none",
-            scrollTrigger: {
-              trigger: ".story-scroll-shell",
-              start: "top top",
-              end: "bottom bottom",
-              scrub: 0.7
-            }
+            ease: "power3.out"
           }
         );
       }
-    });
 
-    return () => {
-      observer.disconnect();
-      ctx.revert();
-    };
-  }, []);
+      if (!prefersReducedMotion) {
+        if (partyThread) {
+          gsap.fromTo(partyThread, { scaleY: 0, transformOrigin: "top center" }, { scaleY: 1, duration: 0.8, ease: "power3.out" });
+        }
+        gsap.to(page.querySelectorAll(".story-drift"), { y: -10, duration: 2.4, repeat: -1, yoyo: true, ease: "sine.inOut" });
+      }
+    }, pageRef);
 
-  function setSectionRef(page, node) {
-    if (node) sectionRefs.current[page] = node;
-  }
+    return () => ctx.revert();
+  }, [location.pathname]);
 
-  function scrollToChapter(nextPage, push = true, behavior = "smooth") {
-    const nextSection = sectionRefs.current[nextPage];
-    if (!nextSection) return;
-
-    activeRef.current = nextPage;
-    setActivePage(nextPage);
-    if (push) window.history.pushState({}, "", pathFor(nextPage));
-    nextSection.scrollIntoView({ behavior, block: "start" });
-  }
-
-  return (
-    <div className="app-shell">
-      <Header goTo={scrollToChapter} />
-      <main>
-        <div className="story-scroll-shell">
-          <div className="party-thread" aria-hidden="true" />
-          <PartyDecorations />
-          <StoryProgress activePage={activePage} />
-          <section className="story-chapter" data-page="Envelope" ref={(node) => setSectionRef("Envelope", node)}>
-            <Envelope goTo={scrollToChapter} />
-          </section>
-          <section className="story-chapter" data-page="Letter" ref={(node) => setSectionRef("Letter", node)}>
-            <Letter goTo={scrollToChapter} />
-          </section>
-          <section className="story-chapter" data-page="Memories" ref={(node) => setSectionRef("Memories", node)}>
-            <Memories goTo={scrollToChapter} />
-          </section>
-          <section className="story-chapter" data-page="Surprises" ref={(node) => setSectionRef("Surprises", node)}>
-            <Surprises goTo={scrollToChapter} />
-          </section>
-        </div>
-      </main>
-      <Footer />
-    </div>
-  );
+  return <section className="route-page" ref={pageRef}>{children}</section>;
 }
 
 function PartyDecorations() {
@@ -180,6 +146,7 @@ function PartyDecorations() {
       <span className="balloon balloon-coral story-drift" />
       <span className="balloon balloon-gold story-drift" />
       <span className="balloon balloon-sky story-drift" />
+      <div className="party-thread" aria-hidden="true" />
       <span className="streamer streamer-one" />
       <span className="streamer streamer-two" />
       <span className="streamer streamer-three" />
@@ -194,32 +161,35 @@ function StoryProgress({ activePage }) {
   return (
     <div className="story-progress" aria-hidden="true">
       {pages.map((page) => (
-        <span className={activePage === page ? "active" : ""} key={page}>
-          {activePage === page && <Sparkles size={18} />}
+        <span className={activePage === page.name ? "active" : ""} key={page.name}>
+          {activePage === page.name && <Sparkles size={18} />}
         </span>
       ))}
     </div>
   );
 }
 
-function Header({ goTo }) {
+function Header() {
+  const navigate = useNavigate();
+
   return (
     <header className="site-header">
-      <button className="brand" onClick={() => goTo("Envelope")}>{content.siteTitle}</button>
-      <button className="heart-mark" onClick={() => goTo("Envelope")} aria-label="Return to the birthday invite">
+      <button className="brand" onClick={() => navigate("/envelope")}>{content.siteTitle}</button>
+      <button className="heart-mark" onClick={() => navigate("/envelope")} aria-label="Return to the birthday invite">
         <Gift size={26} strokeWidth={1.8} />
       </button>
     </header>
   );
 }
 
-function Envelope({ goTo }) {
+function Envelope() {
   const [opening, setOpening] = React.useState(false);
+  const navigate = useNavigate();
 
   function openLetter() {
     if (opening) return;
     setOpening(true);
-    window.setTimeout(() => goTo("Letter"), 680);
+    window.setTimeout(() => navigate("/letter"), 680);
   }
 
   return (
@@ -267,7 +237,9 @@ function Envelope({ goTo }) {
   );
 }
 
-function Letter({ goTo }) {
+function Letter() {
+  const navigate = useNavigate();
+
   return (
     <section className="paper-page letter-page">
         <article className="letter-paper animate-in story-drift">
@@ -289,7 +261,7 @@ function Letter({ goTo }) {
         </div>
         <div className="bottom-tape" />
         <img className="pressed-letter-flower" alt="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAn-pI_mQ807094KzX68p8L_H_0B4J38I8B00v2N_n2V7H4U8r7k8yX" />
-        <button className="story-action letter-action animate-in" onClick={() => goTo("Memories")}>
+        <button className="story-action letter-action animate-in" onClick={() => navigate("/memories")}>
           <span>Start the memory party</span>
           <Sparkles size={20} />
         </button>
@@ -298,7 +270,9 @@ function Letter({ goTo }) {
   );
 }
 
-function Memories({ goTo }) {
+function Memories() {
+  const navigate = useNavigate();
+
   return (
     <section className="paper-page memories-page">
       <PageIntro title="Memory Party" text={content.memoriesIntro} />
@@ -308,7 +282,7 @@ function Memories({ goTo }) {
           <small>{content.memoryNote}</small>
         </div>
         <MemoryCarousel memories={content.memoryCarousel} />
-        <button className="story-action memories-action animate-in" onClick={() => goTo("Surprises")}>
+        <button className="story-action memories-action animate-in" onClick={() => navigate("/surprises")}>
           <span>{content.openSurprisesLabel}</span>
           <Gift size={20} />
         </button>
@@ -393,8 +367,9 @@ function MemoryCarousel({ memories }) {
   );
 }
 
-function Surprises({ goTo }) {
+function Surprises() {
   const [openSurprise, setOpenSurprise] = React.useState(null);
+  const navigate = useNavigate();
 
   return (
     <section className="paper-page surprises-page">
@@ -411,7 +386,7 @@ function Surprises({ goTo }) {
             key={surprise.title}
           />
         ))}
-        <button className="story-action surprises-action animate-in" onClick={() => goTo("Envelope")}>
+        <button className="story-action surprises-action animate-in" onClick={() => navigate("/envelope")}>
           <span>Replay the party</span>
           <Mail size={20} />
         </button>

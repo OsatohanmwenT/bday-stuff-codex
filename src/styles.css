@@ -108,26 +108,22 @@ main {
   min-height: calc(100vh - 72px);
 }
 
-.story-scroll-shell {
+.route-stage {
   position: relative;
   overflow: hidden;
+  min-height: calc(100vh - 72px);
 }
 
-.story-chapter {
+.route-page {
   position: relative;
   z-index: 1;
   min-height: calc(100vh - 72px);
-  scroll-margin-top: 72px;
-}
-
-.story-chapter + .story-chapter {
-  border-top: 2px solid rgba(17, 17, 17, 0.22);
 }
 
 .party-thread {
   position: absolute;
-  top: 38vh;
-  bottom: 38vh;
+  top: 16vh;
+  bottom: 12vh;
   left: max(16px, calc(50% - 620px));
   z-index: 0;
   width: 18px;
@@ -185,14 +181,14 @@ main {
 }
 
 .balloon-gold {
-  top: 122vh;
+  top: 58vh;
   right: 8vw;
   background: var(--yellow);
   animation-delay: -1.5s;
 }
 
 .balloon-sky {
-  top: 286vh;
+  top: 78vh;
   left: 8vw;
   background: var(--blue);
   animation-delay: -3s;
@@ -216,13 +212,13 @@ main {
 }
 
 .streamer-two {
-  top: 220vh;
+  top: 26vh;
   left: 5vw;
   background: var(--green);
 }
 
 .streamer-three {
-  bottom: 34vh;
+  bottom: 18vh;
   right: 10vw;
   background: var(--yellow);
   transform: rotate(8deg);
@@ -241,21 +237,21 @@ main {
 .confetti-1 { top: 12vh; left: 22vw; background: var(--yellow); animation-delay: -1s; }
 .confetti-2 { top: 24vh; left: 77vw; background: var(--blue); animation-delay: -3s; }
 .confetti-3 { top: 64vh; left: 52vw; background: var(--green); animation-delay: -5s; }
-.confetti-4 { top: 102vh; left: 15vw; background: var(--purple); animation-delay: -2s; }
-.confetti-5 { top: 138vh; left: 86vw; background: var(--red); animation-delay: -6s; }
-.confetti-6 { top: 168vh; left: 34vw; background: var(--yellow); animation-delay: -4s; }
-.confetti-7 { top: 206vh; left: 72vw; background: var(--blue); animation-delay: -7s; }
-.confetti-8 { top: 238vh; left: 25vw; background: var(--green); animation-delay: -1s; }
-.confetti-9 { top: 272vh; left: 61vw; background: var(--hot); animation-delay: -3s; }
-.confetti-10 { top: 302vh; left: 12vw; background: var(--red); animation-delay: -8s; }
-.confetti-11 { top: 332vh; left: 88vw; background: var(--yellow); animation-delay: -2s; }
-.confetti-12 { top: 358vh; left: 44vw; background: var(--blue); animation-delay: -6s; }
-.confetti-13 { top: 388vh; left: 18vw; background: var(--green); animation-delay: -4s; }
-.confetti-14 { top: 416vh; left: 73vw; background: var(--purple); animation-delay: -9s; }
-.confetti-15 { top: 444vh; left: 36vw; background: var(--hot); animation-delay: -1s; }
-.confetti-16 { top: 468vh; left: 57vw; background: var(--yellow); animation-delay: -5s; }
-.confetti-17 { top: 496vh; left: 9vw; background: var(--blue); animation-delay: -7s; }
-.confetti-18 { top: 522vh; left: 82vw; background: var(--green); animation-delay: -3s; }
+.confetti-4 { top: 38vh; left: 15vw; background: var(--purple); animation-delay: -2s; }
+.confetti-5 { top: 72vh; left: 86vw; background: var(--red); animation-delay: -6s; }
+.confetti-6 { top: 88vh; left: 34vw; background: var(--yellow); animation-delay: -4s; }
+.confetti-7 { top: 18vh; left: 72vw; background: var(--blue); animation-delay: -7s; }
+.confetti-8 { top: 54vh; left: 25vw; background: var(--green); animation-delay: -1s; }
+.confetti-9 { top: 82vh; left: 61vw; background: var(--hot); animation-delay: -3s; }
+.confetti-10 { top: 30vh; left: 12vw; background: var(--red); animation-delay: -8s; }
+.confetti-11 { top: 48vh; left: 88vw; background: var(--yellow); animation-delay: -2s; }
+.confetti-12 { top: 78vh; left: 44vw; background: var(--blue); animation-delay: -6s; }
+.confetti-13 { top: 92vh; left: 18vw; background: var(--green); animation-delay: -4s; }
+.confetti-14 { top: 10vh; left: 73vw; background: var(--purple); animation-delay: -9s; }
+.confetti-15 { top: 42vh; left: 36vw; background: var(--hot); animation-delay: -1s; }
+.confetti-16 { top: 68vh; left: 57vw; background: var(--yellow); animation-delay: -5s; }
+.confetti-17 { top: 86vh; left: 9vw; background: var(--blue); animation-delay: -7s; }
+.confetti-18 { top: 58vh; left: 82vw; background: var(--green); animation-delay: -3s; }
 
 .story-progress {
   position: fixed;
