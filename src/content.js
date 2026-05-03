@@ -130,13 +130,13 @@ export const content = {
       title: "Birthday Wish 1",
       videoSrc: "/assets/video-1.mp4",
       thumbnailSrc: "",
-      caption: "A little birthday wish saved for you.",
+      // caption: "A little birthday wish saved for you.",
     },
     {
       title: "Birthday Wish 2",
       videoSrc: "/assets/video-2.mp4",
       thumbnailSrc: "",
-      caption: "One more birthday wish, because one was not enough.",
+      // caption: "One more birthday wish, because one was not enough.",
     },
   ],
   surprises: [
