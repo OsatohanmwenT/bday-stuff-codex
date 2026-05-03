@@ -1413,7 +1413,7 @@ main {
 
 .memory-lightbox-card {
   position: relative;
-  width: min(980px, 94vw);
+  width: min(780px, 90vw);
   max-height: 90vh;
   margin: 0;
   padding: 18px 18px 68px;
@@ -1438,7 +1438,7 @@ main {
 .memory-lightbox-card img {
   display: block;
   width: 100%;
-  max-height: calc(90vh - 130px);
+  max-height: calc(82vh - 130px);
   object-fit: contain;
   border: 4px solid var(--ink);
   background: var(--blue);
