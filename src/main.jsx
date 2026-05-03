@@ -1,5 +1,5 @@
 import gsap from "gsap";
-import { ChevronLeft, ChevronRight, Gift, Mail, Paperclip, Play, Sparkles, Star, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Gift, Mail, Paperclip, Sparkles, Star, X } from "lucide-react";
 import { motion } from "motion/react";
 import React from "react";
 import { createRoot } from "react-dom/client";
@@ -424,7 +424,7 @@ function Letter() {
         <div className="bottom-tape" />
         <img className="pressed-letter-flower" alt="" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAn-pI_mQ807094KzX68p8L_H_0B4J38I8B00v2N_n2V7H4U8r7k8yX" />
         <button className="story-action letter-action animate-in" onClick={() => navigate("/memories")}>
-          <span>Start the memory party</span>
+          <span>TAP ME</span>
           <Sparkles size={20} />
         </button>
       </article>
@@ -437,10 +437,10 @@ function Memories() {
 
   return (
     <section className="paper-page memories-page">
-      <PageIntro title="Memory Party" text={content.memoriesIntro} />
+      <PageIntro title="Randomm Times" text={content.memoriesIntro} />
       <div className="memory-experiment-board animate-in">
         <div className="memory-bounce-copy memory-note-card">
-          <span>Snapshots worth celebrating</span>
+          <span>Matthew 7:7</span>
           <small>{content.memoryNote}</small>
         </div>
         <MemoryCarousel memories={content.memoryCarousel} />
@@ -565,8 +565,8 @@ function Surprises() {
 
   return (
     <section className="paper-page surprises-page">
-      <PageIntro title="Make a Wish" text={content.surprisesIntro} />
-      <BirthdayReveal video={content.video} />
+      <PageIntro title="Happy birthday Twinskiiiii" text={content.surprisesIntro} />
+      <BirthdayReveal videos={content.videos} />
       <p className="finale-note animate-in">{content.finaleNote}</p>
       <div className="surprise-board experiment-surprise-board">
         {content.surprises.map((surprise, index) => (
@@ -579,7 +579,7 @@ function Surprises() {
           />
         ))}
         <button className="story-action surprises-action animate-in" onClick={() => navigate("/envelope")}>
-          <span>Replay the party</span>
+          <span>Replay</span>
           <Mail size={20} />
         </button>
       </div>
@@ -587,28 +587,33 @@ function Surprises() {
   );
 }
 
-function BirthdayReveal({ video }) {
+function BirthdayReveal({ videos = [] }) {
   return (
-    <ExpandableScreen layoutId="birthday-video-reveal" triggerRadius="4px" contentRadius="6px" animationDuration={0.34}>
-      <div className="birthday-video-card animate-in">
-        <ExpandableScreenTrigger>
-          <button className="video-note-trigger">
-            <span>Birthday Wish</span>
-            <small>{video.caption}</small>
-            <Play size={22} fill="currentColor" />
-          </button>
-        </ExpandableScreenTrigger>
-        <div className="video-note-screen">
-          <HoverVideoPlayer videoSrc={video.videoSrc} thumbnailSrc={video.thumbnailSrc} caption={video.caption} />
-        </div>
-      </div>
-      <ExpandableScreenContent className="birthday-reveal-screen">
-        <div className="birthday-reveal-inner">
-          <HoverVideoPlayer videoSrc={video.videoSrc} thumbnailSrc={video.thumbnailSrc} caption={video.caption} />
-          <p>{video.videoSrc ? video.caption : "This space is ready for a birthday wishes video when you have one."}</p>
-        </div>
-      </ExpandableScreenContent>
-    </ExpandableScreen>
+    <div className="birthday-video-list">
+      {videos.map((video, index) => (
+        <ExpandableScreen
+          layoutId={`birthday-video-reveal-${index}`}
+          triggerRadius="4px"
+          contentRadius="6px"
+          animationDuration={0.34}
+          key={video.videoSrc || video.title}
+        >
+          <div className="birthday-video-card animate-in">
+            <ExpandableScreenTrigger>
+              <div className="video-note-screen">
+                <HoverVideoPlayer videoSrc={video.videoSrc} thumbnailSrc={video.thumbnailSrc} caption={video.caption} />
+              </div>
+            </ExpandableScreenTrigger>
+          </div>
+          <ExpandableScreenContent className="birthday-reveal-screen">
+            <div className="birthday-reveal-inner">
+              <HoverVideoPlayer videoSrc={video.videoSrc} thumbnailSrc={video.thumbnailSrc} caption={video.caption} controls />
+              <p>{video.videoSrc ? video.caption : "This space is ready for a birthday wishes video when you have one."}</p>
+            </div>
+          </ExpandableScreenContent>
+        </ExpandableScreen>
+      ))}
+    </div>
   );
 }
 
@@ -633,7 +638,7 @@ function ExpandableSurprise({ surprise, index, openSurprise, setOpenSurprise }) 
         {surprise.icon === "star" && <Star size={44} />}
         {surprise.icon === "photo" && <img className="surprise-photo" src={surprise.message} alt={surprise.title} draggable="false" />}
         <h2>{surprise.title}</h2>
-        {surprise.icon !== "photo" && <p>{isOpen ? "Close this wish" : "Open this wish"}</p>}
+        {surprise.icon !== "photo" && <p>{isOpen ? "Close" : "Open"}</p>}
       </ExpandableTrigger>
       <ExpandableContent className="surprise-expanded-message">
         <p>{surprise.icon === "photo" ? surprise.title : surprise.message}</p>
@@ -656,7 +661,7 @@ function Footer() {
   return (
     <footer className="site-footer">
       <strong>{content.siteTitle}</strong>
-      <p>Made with love for your special day</p>
+      <p>A KING IS BORN</p>
     </footer>
   );
 }

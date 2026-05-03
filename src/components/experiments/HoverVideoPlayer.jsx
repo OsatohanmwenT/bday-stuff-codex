@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Heart, Play } from "lucide-react";
 
-export default function HoverVideoPlayer({ videoSrc, thumbnailSrc, caption, className = "" }) {
+export default function HoverVideoPlayer({ videoSrc, thumbnailSrc, caption, className = "", controls = false }) {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isInView, setIsInView] = useState(false);
@@ -28,9 +28,9 @@ export default function HoverVideoPlayer({ videoSrc, thumbnailSrc, caption, clas
     <motion.div
       ref={containerRef}
       className={`rb-hover-video ${className}`}
-      onMouseEnter={playVideo}
-      onMouseLeave={pauseVideo}
-      onClick={() => (isPlaying ? pauseVideo() : playVideo())}
+      onMouseEnter={controls ? undefined : playVideo}
+      onMouseLeave={controls ? undefined : pauseVideo}
+      onClick={controls ? undefined : () => (isPlaying ? pauseVideo() : playVideo())}
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
@@ -38,7 +38,7 @@ export default function HoverVideoPlayer({ videoSrc, thumbnailSrc, caption, clas
       {videoSrc ? (
         <>
           {thumbnailSrc && !isPlaying && <img className="rb-video-thumb" src={thumbnailSrc} alt="Birthday wishes thumbnail" draggable="false" />}
-          {isInView && <video ref={videoRef} src={videoSrc} poster={thumbnailSrc} muted loop playsInline />}
+          {isInView && <video ref={videoRef} src={videoSrc} poster={thumbnailSrc} muted={!controls} loop={!controls} playsInline controls={controls} />}
         </>
       ) : (
         <div className="rb-video-placeholder">
@@ -47,10 +47,9 @@ export default function HoverVideoPlayer({ videoSrc, thumbnailSrc, caption, clas
         </div>
       )}
       <AnimatePresence>
-        {!isPlaying && (
+        {!controls && !isPlaying && (
           <motion.div className="rb-video-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <Play size={28} fill="currentColor" />
-            <span>{caption}</span>
           </motion.div>
         )}
       </AnimatePresence>
